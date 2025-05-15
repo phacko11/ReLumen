@@ -12,7 +12,20 @@
           "package_name": "com.example.relumen"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "694125432639-6s8pncl415mstoik71spvhh0j09u49q4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.relumen",
+            "certificate_hash": "283d817c5e46ad25ebe369381631b2f3fe28428d"
+          }
+        },
+        {
+          "client_id": "694125432639-msb12770rtc33njgapj3pmj92ee8ra2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAGmEB3OZQOh8xtYF_rLaF4HJ56ETKwD-Y"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694125432639-msb12770rtc33njgapj3pmj92ee8ra2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
