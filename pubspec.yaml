@@ -30,9 +30,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+    # Firebase Core - Bắt buộc cho tất cả các plugin Firebase khác
+  firebase_core: ^3.13.0  # (phiên bản có thể thay đổi, kiểm tra pub.dev)
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+    # Firebase Authentication - Cho đăng nhập, đăng ký
+  firebase_auth: ^5.5.3   # (phiên bản có thể thay đổi)
+
+    # Cloud Firestore - Cho cơ sở dữ liệu
+  cloud_firestore: ^5.6.7 # (phiên bản có thể thay đổi)
+
+    # Firebase Storage - Cho lưu trữ file (hình ảnh)
+  firebase_storage: ^12.4.5 # (phiên bản có thể thay đổi)
+
+    # Cloud Functions - Để gọi các hàm backend (bao gồm cả Gemini API sau này)
+  cloud_functions: ^5.5.0 # (phiên bản có thể thay đổi)
+
+    # The following adds the Cupertino Icons font to your application.
+    # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
 dev_dependencies:

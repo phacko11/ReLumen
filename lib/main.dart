@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async { // Thay đổi void main() thành async
+  WidgetsFlutterBinding.ensureInitialized(); // Đảm bảo Flutter binding đã sẵn sàng
+
+  // Khởi tạo Firebase
+  // Nếu bạn đã chạy FlutterFire CLI và có file firebase_options.dart thì dùng dòng dưới:
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // Nếu không (như cách chúng ta đang làm thủ công từng bước):
+  await Firebase.initializeApp(); // Dòng này đủ cho Android khi đã có google-services.json
+
   runApp(const MyApp());
 }
 
