@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "694125432639",
+    "project_id": "relumen-bf211",
+    "storage_bucket": "relumen-bf211.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694125432639:android:38dc120edfff5c026b8d8a",
+        "android_client_info": {
+          "package_name": "com.example.relumen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGmEB3OZQOh8xtYF_rLaF4HJ56ETKwD-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
