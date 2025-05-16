@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart'; // For date formatting
-import '../models/guide_profile_model.dart'; // Ensure path is correct
-import 'create_edit_guide_profile.dart'; // Ensure path is correct
+import 'package:intl/intl.dart'; 
+import '../models/guide_profile_model.dart'; 
+import 'create_edit_guide_profile.dart'; 
 
 class ManageGuideProfileScreen extends StatefulWidget {
   const ManageGuideProfileScreen({super.key});
