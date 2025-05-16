@@ -52,7 +52,7 @@ The project follows a standard Flutter project structure. Key directories within
 * `config/`: Contains configuration files like `api_keys.dart` (which should be gitignored).
 * `models/`: Contains data model classes (e.g., `tour_model.dart`, `guide_profile_model.dart`, `user_model.dart` - if you created one for Firestore user data).
 * `screens/`: Contains UI widget files for different screens of the app (e.g., `login_screen.dart`, `tours_list_screen.dart`, `ai_assistant_screen.dart`, `main_screen.dart` for bottom navigation).
-* `widgets/`: (Optional, if you created it) For reusable custom widgets.
+* `widgets/`: For reusable custom widgets.
 
 ## Getting Started
 
