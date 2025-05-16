@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'signup.dart';
-import 'home.dart';
+import 'main.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (mounted) {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()), 
+            MaterialPageRoute(builder: (context) => MainScreen()), 
             (Route<dynamic> route) => false,
           );
         }
@@ -88,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Login Error'), // English title
-        content: Text(message), // English message content
+        title: const Text('Login Error'), 
+        content: Text(message), 
         actions: <Widget>[
           TextButton(
             child: const Text('Okay'),
@@ -125,9 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
  
-                Image.asset(
-                  'assets/images/final.png',
-                  height: 120, // Điều chỉnh chiều cao của logo nếu cần
+                SvgPicture.asset(
+                  'assets/images/logo.svg',
+                  height: 120, 
                   errorBuilder: (context, error, stackTrace) {
                     return const Text(
                       'Error loading logo',
@@ -141,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 166, 178, 64),
+                    color: Color.fromRGBO(252, 171, 41, 1),
                   ),
                 ),
                 const SizedBox(height: 40), 

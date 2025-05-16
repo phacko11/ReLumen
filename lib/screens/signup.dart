@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; 
-import 'home.dart';
+import 'main.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -64,19 +64,15 @@ class _SignupScreenState extends State<SignupScreen> {
           'createdAt': FieldValue.serverTimestamp(), 
           'photoURL': null, 
         });
-        print('User profile đã được tạo thành công trên Firestore!');
 
         if (mounted) {
-          print('Chuẩn bị điều hướng tới HomeScreen...');
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => MainScreen()),
             (Route<dynamic> route) => false,
           );
-          print('Đã gọi điều hướng.');
         }
       } else {
-        print('FirebaseUser là null sau khi đăng ký Auth thành công?');
         if (mounted) _showErrorDialog("User creation successful but failed to get user details."); 
       }
 
