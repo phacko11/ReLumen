@@ -1,41 +1,56 @@
-// lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login.dart'; // Để điều hướng về sau khi đăng xuất
+import 'login.dart'; 
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  HomeScreen({super.key}); 
 
-  // Lấy instance của FirebaseAuth
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _logout(BuildContext context) async {
     try {
       await _auth.signOut();
-      // Điều hướng về LoginScreen và xóa tất cả các route trước đó
+
+      final scaffoldMessenger = ScaffoldMessenger.of(context); 
+
+  
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
         (Route<dynamic> route) => false,
       );
+      
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text('Logout successful!'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green, 
+        ),
+      );
+
     } catch (e) {
-      print("Lỗi đăng xuất: $e");
-      // Có thể hiển thị thông báo lỗi nếu cần
+      print("Logout error: $e");
+      final scaffoldMessenger = ScaffoldMessenger.of(context); 
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text('Logout error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Lấy thông tin người dùng hiện tại (nếu cần)
     final User? user = _auth.currentUser;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trang chủ'),
+        title: const Text('Home Screen'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Đăng xuất',
+            tooltip: 'Logout',
             onPressed: () {
               _logout(context);
             },
@@ -46,15 +61,15 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Chào mừng đến với ứng dụng!',
+            const Text(
+              'Welcome to ReLumen!',
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 10),
             if (user != null)
               Text(
-                'Email của bạn: ${user.email}',
-                style: TextStyle(fontSize: 16),
+                'Email: ${user.email}',
+                style: const TextStyle(fontSize: 16),
               ),
           ],
         ),
