@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; 
-import 'home.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'home.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -15,22 +16,24 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Khởi tạo Firestore instance
 
-  bool _isLoading = false; 
+  bool _isLoading = false;
 
   Future<void> _signupUser() async {
-
+    print('Đang thử đăng ký với Email: ${_emailController.text.trim()}');
     if (_emailController.text.isEmpty ||
         _passwordController.text.isEmpty ||
         _confirmPasswordController.text.isEmpty) {
-      if (mounted) _showErrorDialog("Please fill in all fields.");
+      if (mounted) _showErrorDialog("Please fill in all fields."); 
       return;
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      if (mounted) _showErrorDialog("Passwords do not match.");
+      if (mounted) _showErrorDialog("Passwords do not match!");
       return;
     }
+
 
     if (mounted) {
       setState(() {
@@ -39,61 +42,79 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     try {
+      print('Bắt đầu gọi createUserWithEmailAndPassword...');
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+      print('createUserWithEmailAndPassword thành công!');
 
-      if (userCredential.user != null) {
-        print('Signup successfully on Firebase. UID: ${userCredential.user?.uid}');
+      User? firebaseUser = userCredential.user; 
+
+      if (firebaseUser != null) {
+        print('ĐĂNG KÝ AUTH THÀNH CÔNG. UID: ${firebaseUser.uid}');
+
+        print('Đang tạo user profile trên Firestore cho UID: ${firebaseUser.uid}...');
+        await _firestore.collection('users').doc(firebaseUser.uid).set({
+          'uid': firebaseUser.uid,
+          'email': firebaseUser.email,
+          'displayName': '', 
+          'role': 'user',    
+          'createdAt': FieldValue.serverTimestamp(), 
+          'photoURL': null, 
+        });
+        print('User profile đã được tạo thành công trên Firestore!');
 
         if (mounted) {
+          print('Chuẩn bị điều hướng tới HomeScreen...');
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false,
           );
-        } 
+          print('Đã gọi điều hướng.');
+        }
       } else {
-        if (mounted) _showErrorDialog("Signup successful but unable to retrieve user information.");
+        print('FirebaseUser là null sau khi đăng ký Auth thành công?');
+        if (mounted) _showErrorDialog("User creation successful but failed to get user details."); 
       }
 
     } on FirebaseAuthException catch (e) {
-      String errorMessage = "Signup failed. Please try again.";
+      String errorMessage = "Registration failed."; // English
       if (e.code == 'weak-password') {
-        errorMessage =  'Password is too weak. Please use at least 6 characters.';
+        errorMessage = 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        errorMessage = 'Email is already in use. Please use another email.';
+        errorMessage = 'The account already exists for that email.';
       } else if (e.code == 'invalid-email') {
-        errorMessage = 'Invalid email format. Please check your email.';
+        errorMessage = 'The email address is not valid.';
       }
-      
-      print('FirebaseAuthException when sign up:');
+      print('FirebaseAuthException during registration:');
       print('Code: ${e.code}');
       print('Message: ${e.message}');
-      print('StackTrace: ${e.stackTrace}');
       if (mounted) _showErrorDialog(errorMessage);
 
-    } catch (e, s) { 
+    } catch (e, s) {
+      print('UNEXPECTED ERROR during registration:');
       print('Error: $e');
       print('StackTrace: $s');
-      if (mounted) _showErrorDialog("An unexpected error occurred. Please try again.");
+      if (mounted) _showErrorDialog("An unexpected error occurred during registration. Please try again."); // English
     } finally {
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
+        print('Finished _signupUser processing, _isLoading = false');
       }
     }
   }
 
   void _showErrorDialog(String message) {
-    if (!mounted) return; 
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Message'),
+        title: const Text('Registration Notice'), // English
         content: Text(message),
         actions: <Widget>[
           TextButton(
@@ -119,34 +140,34 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: const Text('Sign Up to ReLumen'), // English
         centerTitle: true,
       ),
       body: Padding(
+        // ... (Phần UI của build method giữ nguyên như trước, đảm bảo các text là tiếng Anh nếu cần)
         padding: const EdgeInsets.all(20.0),
         child: Center(
-          child: SingleChildScrollView( 
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text(
-                  'Sign Up',
+                  'Create New Account', // English
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30),
-                // Ô nhập Email
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    hintText: 'Your email address',
+                    hintText: 'Enter your email', // English
                     prefixIcon: const Icon(Icons.email),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  enabled: !_isLoading, 
+                  enabled: !_isLoading,
                 ),
                 const SizedBox(height: 20),
                 TextField(
@@ -154,32 +175,31 @@ class _SignupScreenState extends State<SignupScreen> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    hintText: 'Your password',
+                    hintText: 'Enter your password (min. 6 characters)', // English
                     prefixIcon: const Icon(Icons.lock_outline),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  enabled: !_isLoading, // Vô hiệu hóa khi đang loading
+                  enabled: !_isLoading,
                 ),
                 const SizedBox(height: 20),
-                // Ô nhập Xác nhận Mật khẩu
                 TextField(
                   controller: _confirmPasswordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
-                    hintText: 'Confirm your password',
+                    hintText: 'Re-enter your password', // English
                     prefixIcon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  enabled: !_isLoading, 
+                  enabled: !_isLoading,
                 ),
                 const SizedBox(height: 30),
                 _isLoading
-                    ? const CircularProgressIndicator() 
+                    ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: _signupUser,
                         style: ElevatedButton.styleFrom(
@@ -188,21 +208,20 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: const Text('Sign Up', style: TextStyle(fontSize: 18)),
+                        child: const Text('Sign Up', style: TextStyle(fontSize: 18)), // English
                       ),
                 const SizedBox(height: 20),
-                // Chuyển sang màn hình Đăng nhập
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('Already have account?'),
+                    const Text("Already have an account?"), // English
                     TextButton(
                       onPressed: _isLoading ? null : () {
                         if (Navigator.canPop(context)) {
                            Navigator.pop(context);
                         }
                       },
-                      child: const Text('Login now'),
+                      child: const Text('Login now'), // English
                     ),
                   ],
                 ),

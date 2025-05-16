@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart'; 
+import 'ai_assistant.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key}); 
@@ -71,6 +72,22 @@ class HomeScreen extends StatelessWidget {
                 'Email: ${user.email}',
                 style: const TextStyle(fontSize: 16),
               ),
+            ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AiAssistantScreen()),
+            );
+          },
+          child: const Text('Ask Luminas about culture!!'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _logout(context);
+              },
+              child: const Text('Logout'),
+            ),
           ],
         ),
       ),
