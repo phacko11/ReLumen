@@ -11,7 +11,6 @@ android {
     namespace = "com.example.relumen" // Giữ namespace hiện tại của bạn
     compileSdk = flutter.compileSdkVersion
 
-    // >>> SỬA ĐỔI 1: CẬP NHẬT NDK VERSION <<<
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -24,10 +23,9 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.relumen" // Giữ applicationId hiện tại của bạn
+        applicationId = "com.example.relumen" 
 
-        // >>> SỬA ĐỔI 2: TĂNG MINSDKVERSION <<<
-        minSdk = 23 // Thay vì flutter.minSdkVersion
+        minSdk = 23 
 
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
